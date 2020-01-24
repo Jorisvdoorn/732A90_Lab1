@@ -1,0 +1,201 @@
+---
+title: "732A90 - Lab 1 - jorva845"
+author: "Joris van Doorn"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+RNGversion('3.5.1')
+knitr::opts_chunk$set(echo = TRUE)
+library(RMaCzek)
+library(knitr)
+library(tidyr)
+library(tidyverse)
+library(tinytex)
+library(dplyr)
+```
+
+#Q1: Be careful when comparint
+
+*Consider the following two R code snippets*
+
+```{r}
+x1 <- 1/3; x2 <- 1/4
+if(x1-x2==1/12){
+  print("Subtraction is correct")
+}else{
+  print("Subtraction is wrong")
+}
+```
+
+
+```{r}
+x3 <- 1; x4 <- 1/2
+if(x3-x4==1/2){
+  print("Subtraction is correct")
+}else{
+  print("Subtraction is wrong")
+}
+```
+
+##1.
+
+*Check the results of the snippets. Comment what is going on.*
+
+So if we would do these calculations manually we would expect both calculations to return the correct answer. Yet the first one fails. I suspect that it has to do with the fact that 1/3 is irrational and R creates rounding errors when perfroming these calculations. Let's explore:
+
+```{r}
+sprintf("%.20f", (x1-x2))
+sprintf("%.20f", 1/12)
+```
+
+As becomes clear the two values in the first computation do indeed not equal to each other.
+
+##2.
+
+*If there are any problems, suggest improvements.*
+
+The problem lies in rounding errors, so this might be solved by using less decimal points. Let's try.
+
+```{r}
+x1 <- 1/3; x2 <- 1/4
+if(round((x1-x2), digits = 15) == round((1/12), digits = 15)){
+  print("Subtraction is correct")
+}else{
+  print("Subtraction is wrong")
+}
+```
+
+This seems to work.
+
+\newpage
+
+#Q2: Derivative
+
+*From the defintion of a derivative a popular way of computing it at a point x is to use a small $\epsilon$ and the formula*
+
+$$f'(x) = \frac{f(x + \epsilon) - f(x)}{\epsilon}$$
+
+##1.
+
+*Write your own R function to calculate the derivative of f(x) = x in this way with $\epsilon = 10^{15}$*í¯€15.*
+
+```{r}
+f <- function(x){
+  return(x)
+}
+
+myderiv <- function(f, x, e){
+  deriv <- (f(x + e) - f(x))/(e)
+  return(deriv)
+}
+```
+
+##2.
+
+*Evaluate your derivative function at x = 1 and x = 100000.*
+
+```{r}
+myderiv(f = f, x = 1, e = 10^-15)
+myderiv(f = f, x = 100000, e = 10^-15)
+```
+
+##3.
+
+*What values did you obtain? What are the true values? Explain the reasons behind the discovered differences.* 
+
+The values I obtained are 1.110223 and 0, which are both not the true value. The true value should be 1 for both, because ((x+e)-x)/e should simplify to e/e, which is 1. Again, the errors are due to rounding issues. If x is small, the small value of e has some impace on the computation resulting in a value close to 1, but when x gets bigger the impact of e gets smaller and is eventually neglected by R.
+
+\newpage
+
+#Q3: Variance
+
+*A known formula for estimating the variance based on a vector of n observations is*
+
+$$Var(\overrightarrow{x}) = \frac{1}{n - 1}(\sum_{i=1}^{n}x_i^2-\frac{1}{n}(\sum_{i=1}^{n}x_i)^2)$$
+
+
+##1.
+
+*Write your own R function, myvar, to estimate the variance in this way.*
+
+```{r}
+myvar <- function(x){
+  n <- length(x)
+  variance <- (1/(n-1)) * (sum(x^2) - ((1/n)*(sum(x))^2))
+  return(variance)
+}
+```
+
+##2.
+
+*Generate a vector x = (x1, ..., x10000) with 10000 random numbers with mean 10^8 and variance 1.*
+
+```{r}
+data <- rnorm(10000, mean=10^8, sd=1)
+```
+
+##3.
+
+*For each subset Xi = {x1, ..., xi}, i = 1, ..., 10000 compute the difference Yi = myvar(Xi)-var(Xi), where var(Xi) is the standard variance estimation function in R. Plot the dependence Yi on i. Draw conclusions from this plot. How well does your function work? Can you explain the behaviour?*
+
+```{r}
+Yi <- 0
+
+for(i in 1:length(data)){
+  Yi[i] <- myvar(data[1:i]) - var(data[1:i])
+}
+
+i <- c(1:10000)
+  
+plot(i, Yi)
+```
+
+As you can see in the graph this variance implementation is quite far off from the actual variance, because otherwise all the points would be close to 0. I suspect that the difference is caused in the way R treats the numbers and how many decimals get included by default.
+
+##4.
+
+*How can you better implement a variance estimator? Find and implement a formula that will give the same results as var()?*
+
+I want to attempt the following:
+
+$$Var(X) = \frac{(X_i - \overline{X})^2}{N}$$
+
+```{r}
+newvar <- function(x){
+  n <- length(x)
+  xbar <- rep(mean(x), n)
+  variance <- sum(((x - xbar)^2))/n
+  return(variance)
+}
+
+Yi2 <- 0
+
+for(i in 1:length(data)){
+  Yi2[i] <- newvar(data[1:i]) - var(data[1:i])
+}
+
+i <- c(1:10000)
+
+plot(i, Yi2)
+
+```
+
+This seems to work better. As you can see in the graph the difference in variance converges towards 0, meaning no difference between my new variance implementation and R's variance method.
+
+\newpage
+
+#Q4: Linear Algebra
+
+*The Excel file "tecator.xls" contains the results of a study aimed to investigate whether a near-infrared absorbance spectrum and the levels of moisture and fat can be used to predict the protein content of samples of meat. For each meat sample the data consists of a 100 channel spectrum of absorbance records and the levels of moisture (water), fat and protein. The absorbance is -log10 of the transmittance measured by the spectrometer. The moisture, fat and protein are determined by analytic chemistry. The worksheet you need to use is "data" (or file "tecator.csv"). It contains data from 215 samples of finely chopped meat. The aim is to fit a linear regression model that could predict protein content as function of all other variables.*
+
+
+
+
+\newpage
+
+# Appendix
+
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE,results='show'}
+```
