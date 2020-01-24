@@ -14,6 +14,7 @@ library(tidyr)
 library(tidyverse)
 library(tinytex)
 library(dplyr)
+library(readxl)
 ```
 
 #Q1: Be careful when comparint
@@ -190,8 +191,13 @@ This seems to work better. As you can see in the graph the difference in varianc
 
 *The Excel file "tecator.xls" contains the results of a study aimed to investigate whether a near-infrared absorbance spectrum and the levels of moisture and fat can be used to predict the protein content of samples of meat. For each meat sample the data consists of a 100 channel spectrum of absorbance records and the levels of moisture (water), fat and protein. The absorbance is -log10 of the transmittance measured by the spectrometer. The moisture, fat and protein are determined by analytic chemistry. The worksheet you need to use is "data" (or file "tecator.csv"). It contains data from 215 samples of finely chopped meat. The aim is to fit a linear regression model that could predict protein content as function of all other variables.*
 
+##1.
 
+*Import the data set to R*
 
+```{r}
+data <- read_excel("tecator.xls")
+```
 
 \newpage
 
