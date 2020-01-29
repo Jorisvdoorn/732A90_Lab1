@@ -80,7 +80,7 @@ $$f'(x) = \frac{f(x + \epsilon) - f(x)}{\epsilon}$$
 
 ##1.
 
-*Write your own R function to calculate the derivative of f(x) = x in this way with $\epsilon = 10^{15}$*í¯€15.*
+*Write your own R function to calculate the derivative of f(x) = x in this way with $\epsilon = 10^{15}$*ï¿½ï¿½ï¿½15.*
 
 ```{r}
 f <- function(x){
@@ -197,7 +197,60 @@ This seems to work better. As you can see in the graph the difference in varianc
 
 ```{r}
 data <- read_excel("tecator.xls")
+y_index <- grep("Protein", colnames(data))
+y <- as.matrix(data$Protein)
+X <- as.matrix(data[,-y_index])
 ```
+
+##2.
+
+*Optimal regression coeffcients can be found by solving a system of type $A\overline{\beta} = \overline{b}$ where $A=X^TX$ and $\overline{b} = X^T\overline{y}$. Compute A and $\overline{b}$ for the given data set. The matrix X are the observations of the absorbance records, levels of moisture and fat, while $\overline{y}$ are the protein levels*
+
+```{r}
+A <- t(X) %*% X
+b <-  t(X) %*% y  
+```
+
+##3.
+
+*Try to solve Abeta = b with default solver solve(). What kind of result did you get? How can this result be explained?*
+
+```{r}
+solve(A, b)
+det(A)
+```
+
+The error that I get is: "Error in solve.default(A, b): system is computationally singular: reciprocal condition number = 3.02468e-17". This means that R cannot solve this system of equations because the determinant is 0, or more accurately, too close to 0 for R to handle. This is demonstrated with det(A).
+
+##4.
+
+*Check the condition number of the matrix A (function kappa()) and consider how it is related to your conclusion in step 3.*
+
+```{r}
+kappa(A)
+kappa(b)
+```
+  
+The kappa of A is quite large, which explains why solve() does not work. Kappa in this context is the condition number, which is supposed to measure the sensitivity of the response of the output to changes in the input. If this kappa is large, it means that small changes in the input values have a large impact on the output values.
+
+##5.
+
+*Scale the data set and repeat steps 2-4. How has the result changed and why?*
+
+```{r}
+data2 <- scale(data)
+y_index <- grep("Protein", colnames(data2))
+y <- as.matrix(data2[,y_index])
+X <- as.matrix(data2[,-y_index])
+A <- t(X) %*% X
+b <-  t(X) %*% y  
+solve(A, b)
+det(A)
+kappa(A)
+kappa(b)
+```
+
+When repeating the steps with scaled data, R is able to solve the system of equations. The kappa is also much smaller than previously. Surprisingly, the determinant is still 0, which is something I cannot explain. I pressume that R can solve the equations now because the data is normalized and all variables are now on the same scale.
 
 \newpage
 
