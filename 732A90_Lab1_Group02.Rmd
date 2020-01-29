@@ -1,0 +1,259 @@
+---
+title: "732A90 Computational Statistics - Lab 1"
+author: "Joris van Doorn - jorva845 | Bayu Brahmantio - baybr878 | Ismail Khalil - ismkh208"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+RNGversion(min(as.character(getRversion()), "3.6.2"))
+knitr::opts_chunk$set(echo = TRUE)
+library(RMaCzek)
+library(knitr)
+library(tidyr)
+library(tidyverse)
+library(tinytex)
+library(dplyr)
+library(readxl)
+```
+
+#Q1: Be careful when comparing
+
+*Consider the following two R code snippets*
+
+```{r}
+x1 <- 1/3; x2 <- 1/4
+if(x1-x2==1/12){
+  print("Subtraction is correct")
+}else{
+  print("Subtraction is wrong")
+}
+```
+
+
+```{r}
+x3 <- 1; x4 <- 1/2
+if(x3-x4==1/2){
+  print("Subtraction is correct")
+}else{
+  print("Subtraction is wrong")
+}
+```
+
+##1.
+
+*Check the results of the snippets. Comment what is going on.*
+
+So if we would do these calculations manually we would expect both calculations to return the correct answer. Yet the first one fails. I suspect that it has to do with the fact that 1/3 has a repeating infinite decimals and R creates rounding errors when perfroming these calculations. Let's explore:
+
+```{r}
+sprintf("%.20f", (x1-x2))
+sprintf("%.20f", 1/12)
+```
+
+As becomes clear the two values in the first computation do indeed not equal to each other.
+
+##2.
+
+*If there are any problems, suggest improvements.*
+
+The problem lies in rounding errors, so this might be solved by using less decimal points. Let's try.
+
+```{r}
+x1 <- 1/3; x2 <- 1/4
+if(round((x1-x2), digits = 15) == round((1/12), digits = 15)){
+  print("Subtraction is correct")
+}else{
+  print("Subtraction is wrong")
+}
+```
+
+This seems to work.
+
+\newpage
+
+#Q2: Derivative
+
+*From the defintion of a derivative a popular way of computing it at a point x is to use a small $\epsilon$ and the formula*
+
+$$f'(x) = \frac{f(x + \epsilon) - f(x)}{\epsilon}$$
+
+##1.
+
+*Write your own R function to calculate the derivative of f(x) = x in this way with $\epsilon = 10^{15}$*���15.*
+
+```{r}
+f <- function(x){
+  return(x)
+}
+
+myderiv <- function(f, x, e){
+  deriv <- (f(x + e) - f(x))/(e)
+  return(deriv)
+}
+```
+
+##2.
+
+*Evaluate your derivative function at x = 1 and x = 100000.*
+
+```{r}
+myderiv(f = f, x = 1, e = 10^-15)
+myderiv(f = f, x = 100000, e = 10^-15)
+```
+
+##3.
+
+*What values did you obtain? What are the true values? Explain the reasons behind the discovered differences.* 
+
+The values we obtained are 1.110223 and 0, which are both not the true value. The true value should be 1 for both, because ((x+e)-x)/e should simplify to e/e, which is 1. Again, the errors are due to rounding issues. If x is small, the small value of e has some impact on the computation resulting in a value close to 1, but when x gets bigger the impact of e gets smaller and is eventually neglected by R.
+
+\newpage
+
+#Q3: Variance
+
+*A known formula for estimating the variance based on a vector of n observations is*
+
+$$Var(\overrightarrow{x}) = \frac{1}{n - 1}(\sum_{i=1}^{n}x_i^2-\frac{1}{n}(\sum_{i=1}^{n}x_i)^2)$$
+
+
+##1.
+
+*Write your own R function, myvar, to estimate the variance in this way.*
+
+```{r}
+myvar <- function(x){
+  n <- length(x)
+  variance <- (1/(n-1)) * (sum(x^2) - ((1/n)*(sum(x))^2))
+  return(variance)
+}
+```
+
+##2.
+
+*Generate a vector x = (x1, ..., x10000) with 10000 random numbers with mean 10^8 and variance 1.*
+
+```{r}
+set.seed(12345, kind = "Mersenne-Twister", normal.kind = "Inversion")
+data <- rnorm(10000, mean=10^8, sd=1)
+```
+
+##3.
+
+*For each subset Xi = {x1, ..., xi}, i = 1, ..., 10000 compute the difference Yi = myvar(Xi)-var(Xi), where var(Xi) is the standard variance estimation function in R. Plot the dependence Yi on i. Draw conclusions from this plot. How well does your function work? Can you explain the behaviour?*
+
+```{r}
+Yi <- 0
+
+for(i in 1:length(data)){
+  Yi[i] <- myvar(data[1:i]) - var(data[1:i])
+}
+
+i <- c(1:10000)
+  
+plot(i, Yi)
+```
+
+As you can see in the graph this variance implementation is quite far off from the actual variance, because otherwise all the points would be close to 0. We suspect that the difference is caused by the number of summations we use and in the way R treats the numbers and how many decimals get included by default.
+
+##4.
+
+*How can you better implement a variance estimator? Find and implement a formula that will give the same results as var()?*
+
+We want to attempt the following:
+
+$$Var(X) = \frac{\sum_{i=1}^{n}(x_i - \overline{x})^2}{n-1}$$
+
+```{r}
+newvar <- function(x){
+  n <- length(x)
+  xbar <- rep(mean(x), n)
+  variance <- sum(((x - xbar)^2))/(n-1)
+  return(variance)
+}
+
+Yi2 <- 0
+
+for(i in 1:length(data)){
+  Yi2[i] <- newvar(data[1:i]) - var(data[1:i])
+}
+
+i <- c(1:10000)
+
+plot(i, Yi2)
+
+```
+
+This seems to work better. As you can see in the graph the difference in variance converges towards 0, meaning no difference between our new variance implementation and R's variance method.
+
+\newpage
+
+#Q4: Linear Algebra
+
+*The Excel file "tecator.xls" contains the results of a study aimed to investigate whether a near-infrared absorbance spectrum and the levels of moisture and fat can be used to predict the protein content of samples of meat. For each meat sample the data consists of a 100 channel spectrum of absorbance records and the levels of moisture (water), fat and protein. The absorbance is -log10 of the transmittance measured by the spectrometer. The moisture, fat and protein are determined by analytic chemistry. The worksheet you need to use is "data" (or file "tecator.csv"). It contains data from 215 samples of finely chopped meat. The aim is to fit a linear regression model that could predict protein content as function of all other variables.*
+
+##1.
+
+*Import the data set to R*
+
+```{r}
+data <- read_excel("tecator.xls")
+y_index <- grep("Protein", colnames(data))
+y <- as.matrix(data$Protein)
+X <- as.matrix(data[,-y_index])
+```
+
+##2.
+
+*Optimal regression coeffcients can be found by solving a system of type $A\overline{\beta} = \overline{b}$ where $A=X^TX$ and $\overline{b} = X^T\overline{y}$. Compute A and $\overline{b}$ for the given data set. The matrix X are the observations of the absorbance records, levels of moisture and fat, while $\overline{y}$ are the protein levels*
+
+```{r}
+A <- t(X) %*% X
+b <-  t(X) %*% y  
+```
+
+##3.
+
+*Try to solve Abeta = b with default solver solve(). What kind of result did you get? How can this result be explained?*
+
+```{r, eval=FALSE}
+solve(A, b)
+```
+
+The error that we get is: "Error in solve.default(A, b): system is computationally singular: reciprocal condition number = 3.02468e-17". This means that the matrix $A$ is not invertible.
+
+##4.
+
+*Check the condition number of the matrix A (function kappa()) and consider how it is related to your conclusion in step 3.*
+
+```{r}
+kappa(A)
+```
+  
+The kappa of A is quite large, which explains why solve() does not work. Kappa in this context is the condition number, which is supposed to measure the sensitivity of the response of the output to changes in the input. If this kappa is large, it means that small changes in the input values have a large impact on the output values.  
+If the value of kappa is very large compared to 1, the matrix is ill-conditioned which implies that its inverse cannot be calculated accurately. Since $kappa(A)$ is a large value, $A$ is an ill-conditioned matrix which results in singularity when computing its inverse.   
+
+##5.
+
+*Scale the data set and repeat steps 2-4. How has the result changed and why?*
+
+```{r}
+data2 <- scale(data)
+y_index <- grep("Protein", colnames(data2))
+y <- as.matrix(data2[,y_index])
+X <- as.matrix(data2[,-y_index])
+A <- t(X) %*% X
+b <-  t(X) %*% y  
+solve(A, b)
+cat("kappa:", kappa(A))
+```
+
+When repeating the steps with scaled data, R is able to solve the system of equations. The kappa is also much smaller than previously. We pressume that R can solve the equations now because the data is normalized and all variables are now on the same scale.   
+Since we scaled the data, the values in matrix $A$ are smaller than the unscaled ones. This resulted in $A$ being an approximately well-conditioned matrix, shown by the new $kappa(A)$ value which is much smaller than before.   
+
+\newpage
+
+# Appendix
+
+```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE,results='show'}
+```
