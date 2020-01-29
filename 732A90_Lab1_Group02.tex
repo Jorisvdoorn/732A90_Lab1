@@ -1,0 +1,716 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={732A90 Computational Statistics - Lab 1},
+            pdfauthor={Joris van Doorn - jorva845 \textbar{} Bayu Brahmantio - baybr878 \textbar{} Ismail Khalil - ismkh208},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{732A90 Computational Statistics - Lab 1}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Joris van Doorn - jorva845 \textbar{} Bayu Brahmantio - baybr878
+\textbar{} Ismail Khalil - ismkh208}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{29 January 2020}
+
+
+\begin{document}
+\maketitle
+
+\#Q1: Be careful when comparing
+
+\emph{Consider the following two R code snippets}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x1 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{; x2 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{4}
+\ControlFlowTok{if}\NormalTok{(x1}\OperatorTok{-}\NormalTok{x2}\OperatorTok{==}\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is correct"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is wrong"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Subtraction is wrong"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x3 <-}\StringTok{ }\DecValTok{1}\NormalTok{; x4 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{2}
+\ControlFlowTok{if}\NormalTok{(x3}\OperatorTok{-}\NormalTok{x4}\OperatorTok{==}\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is correct"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is wrong"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Subtraction is correct"
+\end{verbatim}
+
+\#\#1.
+
+\emph{Check the results of the snippets. Comment what is going on.}
+
+So if we would do these calculations manually we would expect both
+calculations to return the correct answer. Yet the first one fails. I
+suspect that it has to do with the fact that 1/3 has a repeating
+infinite decimals and R creates rounding errors when perfroming these
+calculations. Let's explore:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sprintf}\NormalTok{(}\StringTok{"%.20f"}\NormalTok{, (x1}\OperatorTok{-}\NormalTok{x2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "0.08333333333333331483"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sprintf}\NormalTok{(}\StringTok{"%.20f"}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "0.08333333333333332871"
+\end{verbatim}
+
+As becomes clear the two values in the first computation do indeed not
+equal to each other.
+
+\#\#2.
+
+\emph{If there are any problems, suggest improvements.}
+
+The problem lies in rounding errors, so this might be solved by using
+less decimal points. Let's try.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x1 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{; x2 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{4}
+\ControlFlowTok{if}\NormalTok{(}\KeywordTok{round}\NormalTok{((x1}\OperatorTok{-}\NormalTok{x2), }\DataTypeTok{digits =} \DecValTok{15}\NormalTok{) }\OperatorTok{==}\StringTok{ }\KeywordTok{round}\NormalTok{((}\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{), }\DataTypeTok{digits =} \DecValTok{15}\NormalTok{))\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is correct"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is wrong"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Subtraction is correct"
+\end{verbatim}
+
+This seems to work.
+
+\newpage
+
+\#Q2: Derivative
+
+\emph{From the defintion of a derivative a popular way of computing it
+at a point x is to use a small \(\epsilon\) and the formula}
+
+\[f'(x) = \frac{f(x + \epsilon) - f(x)}{\epsilon}\]
+
+\#\#1.
+
+\emph{Write your own R function to calculate the derivative of f(x) = x
+in this way with \(\epsilon = 10^{15}\)}���15.*
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{f <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{return}\NormalTok{(x)}
+\NormalTok{\}}
+
+\NormalTok{myderiv <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(f, x, e)\{}
+\NormalTok{  deriv <-}\StringTok{ }\NormalTok{(}\KeywordTok{f}\NormalTok{(x }\OperatorTok{+}\StringTok{ }\NormalTok{e) }\OperatorTok{-}\StringTok{ }\KeywordTok{f}\NormalTok{(x))}\OperatorTok{/}\NormalTok{(e)}
+  \KeywordTok{return}\NormalTok{(deriv)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#2.
+
+\emph{Evaluate your derivative function at x = 1 and x = 100000.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{myderiv}\NormalTok{(}\DataTypeTok{f =}\NormalTok{ f, }\DataTypeTok{x =} \DecValTok{1}\NormalTok{, }\DataTypeTok{e =} \DecValTok{10}\OperatorTok{^-}\DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.110223
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{myderiv}\NormalTok{(}\DataTypeTok{f =}\NormalTok{ f, }\DataTypeTok{x =} \DecValTok{100000}\NormalTok{, }\DataTypeTok{e =} \DecValTok{10}\OperatorTok{^-}\DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\#\#3.
+
+\emph{What values did you obtain? What are the true values? Explain the
+reasons behind the discovered differences.}
+
+The values we obtained are 1.110223 and 0, which are both not the true
+value. The true value should be 1 for both, because ((x+e)-x)/e should
+simplify to e/e, which is 1. Again, the errors are due to rounding
+issues. If x is small, the small value of e has some impact on the
+computation resulting in a value close to 1, but when x gets bigger the
+impact of e gets smaller and is eventually neglected by R.
+
+\newpage
+
+\#Q3: Variance
+
+\emph{A known formula for estimating the variance based on a vector of n
+observations is}
+
+\[Var(\overrightarrow{x}) = \frac{1}{n - 1}(\sum_{i=1}^{n}x_i^2-\frac{1}{n}(\sum_{i=1}^{n}x_i)^2)\]
+
+\#\#1.
+
+\emph{Write your own R function, myvar, to estimate the variance in this
+way.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{myvar <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(x)}
+\NormalTok{  variance <-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{(n}\DecValTok{-1}\NormalTok{)) }\OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\OperatorTok{-}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{/}\NormalTok{n)}\OperatorTok{*}\NormalTok{(}\KeywordTok{sum}\NormalTok{(x))}\OperatorTok{^}\DecValTok{2}\NormalTok{))}
+  \KeywordTok{return}\NormalTok{(variance)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#2.
+
+\emph{Generate a vector x = (x1, \ldots{}, x10000) with 10000 random
+numbers with mean 10\^{}8 and variance 1.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{, }\DataTypeTok{kind =} \StringTok{"Mersenne-Twister"}\NormalTok{, }\DataTypeTok{normal.kind =} \StringTok{"Inversion"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10000}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{10}\OperatorTok{^}\DecValTok{8}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#3.
+
+\emph{For each subset Xi = \{x1, \ldots{}, xi\}, i = 1, \ldots{}, 10000
+compute the difference Yi = myvar(Xi)-var(Xi), where var(Xi) is the
+standard variance estimation function in R. Plot the dependence Yi on i.
+Draw conclusions from this plot. How well does your function work? Can
+you explain the behaviour?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Yi <-}\StringTok{ }\DecValTok{0}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(data))\{}
+\NormalTok{  Yi[i] <-}\StringTok{ }\KeywordTok{myvar}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i]) }\OperatorTok{-}\StringTok{ }\KeywordTok{var}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i])}
+\NormalTok{\}}
+
+\NormalTok{i <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10000}\NormalTok{)}
+  
+\KeywordTok{plot}\NormalTok{(i, Yi)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{732A90_Lab1_Group02_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+As you can see in the graph this variance implementation is quite far
+off from the actual variance, because otherwise all the points would be
+close to 0. We suspect that the difference is caused by the number of
+summations we use and in the way R treats the numbers and how many
+decimals get included by default.
+
+\#\#4.
+
+\emph{How can you better implement a variance estimator? Find and
+implement a formula that will give the same results as var()?}
+
+We want to attempt the following:
+
+\[Var(X) = \frac{\sum_{i=1}^{n}(x_i - \overline{x})^2}{n-1}\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{newvar <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(x)}
+\NormalTok{  xbar <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\KeywordTok{mean}\NormalTok{(x), n)}
+\NormalTok{  variance <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(((x }\OperatorTok{-}\StringTok{ }\NormalTok{xbar)}\OperatorTok{^}\DecValTok{2}\NormalTok{))}\OperatorTok{/}\NormalTok{(n}\DecValTok{-1}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(variance)}
+\NormalTok{\}}
+
+\NormalTok{Yi2 <-}\StringTok{ }\DecValTok{0}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(data))\{}
+\NormalTok{  Yi2[i] <-}\StringTok{ }\KeywordTok{newvar}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i]) }\OperatorTok{-}\StringTok{ }\KeywordTok{var}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i])}
+\NormalTok{\}}
+
+\NormalTok{i <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10000}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(i, Yi2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{732A90_Lab1_Group02_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+This seems to work better. As you can see in the graph the difference in
+variance converges towards 0, meaning no difference between our new
+variance implementation and R's variance method.
+
+\newpage
+
+\#Q4: Linear Algebra
+
+\emph{The Excel file ``tecator.xls'' contains the results of a study
+aimed to investigate whether a near-infrared absorbance spectrum and the
+levels of moisture and fat can be used to predict the protein content of
+samples of meat. For each meat sample the data consists of a 100 channel
+spectrum of absorbance records and the levels of moisture (water), fat
+and protein. The absorbance is -log10 of the transmittance measured by
+the spectrometer. The moisture, fat and protein are determined by
+analytic chemistry. The worksheet you need to use is ``data'' (or file
+``tecator.csv''). It contains data from 215 samples of finely chopped
+meat. The aim is to fit a linear regression model that could predict
+protein content as function of all other variables.}
+
+\#\#1.
+
+\emph{Import the data set to R}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"tecator.xls"}\NormalTok{)}
+\NormalTok{y_index <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"Protein"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(data))}
+\NormalTok{y <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data}\OperatorTok{$}\NormalTok{Protein)}
+\NormalTok{X <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data[,}\OperatorTok{-}\NormalTok{y_index])}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#2.
+
+\emph{Optimal regression coeffcients can be found by solving a system of
+type \(A\overline{\beta} = \overline{b}\) where \(A=X^TX\) and
+\(\overline{b} = X^T\overline{y}\). Compute A and \(\overline{b}\) for
+the given data set. The matrix X are the observations of the absorbance
+records, levels of moisture and fat, while \(\overline{y}\) are the
+protein levels}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{X}
+\NormalTok{b <-}\StringTok{  }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{y  }
+\end{Highlighting}
+\end{Shaded}
+
+\#\#3.
+
+\emph{Try to solve Abeta = b with default solver solve(). What kind of
+result did you get? How can this result be explained?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{solve}\NormalTok{(A, b)}
+\end{Highlighting}
+\end{Shaded}
+
+The error that we get is: ``Error in solve.default(A, b): system is
+computationally singular: reciprocal condition number = 3.02468e-17''.
+This means that the matrix \(A\) is not invertible.
+
+\#\#4.
+
+\emph{Check the condition number of the matrix A (function kappa()) and
+consider how it is related to your conclusion in step 3.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{kappa}\NormalTok{(A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4.274694e+15
+\end{verbatim}
+
+The kappa of A is quite large, which explains why solve() does not work.
+Kappa in this context is the condition number, which is supposed to
+measure the sensitivity of the response of the output to changes in the
+input. If this kappa is large, it means that small changes in the input
+values have a large impact on the output values.\\
+If the value of kappa is very large compared to 1, the matrix is
+ill-conditioned which implies that its inverse cannot be calculated
+accurately. Since \(kappa(A)\) is a large value, \(A\) is an
+ill-conditioned matrix which results in singularity when computing its
+inverse.
+
+\#\#5.
+
+\emph{Scale the data set and repeat steps 2-4. How has the result
+changed and why?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data2 <-}\StringTok{ }\KeywordTok{scale}\NormalTok{(data)}
+\NormalTok{y_index <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"Protein"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(data2))}
+\NormalTok{y <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data2[,y_index])}
+\NormalTok{X <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data2[,}\OperatorTok{-}\NormalTok{y_index])}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{X}
+\NormalTok{b <-}\StringTok{  }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{y  }
+\KeywordTok{solve}\NormalTok{(A, b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                     [,1]
+## Sample        -0.0120159
+## Channel1    -102.3669689
+## Channel2    -248.5383275
+## Channel3     412.7916359
+## Channel4    -180.8159605
+## Channel5     488.0241928
+## Channel6    -117.5282387
+## Channel7    -191.7399928
+## Channel8      78.8198264
+## Channel9    -137.2970747
+## Channel10    219.9621095
+## Channel11   -308.2173340
+## Channel12   -317.2517395
+## Channel13    680.5116039
+## Channel14   -376.6516565
+## Channel15    131.0865458
+## Channel16   -298.1785020
+## Channel17    168.6764043
+## Channel18    278.1307690
+## Channel19   -291.8090262
+## Channel20    -30.6267135
+## Channel21    571.2811368
+## Channel22  -1412.2607600
+## Channel23   1986.4880884
+## Channel24  -1569.3869206
+## Channel25    711.3571490
+## Channel26   -110.0583088
+## Channel27    -10.5583156
+## Channel28   -206.4807821
+## Channel29    447.1327293
+## Channel30   -653.2555738
+## Channel31    495.5693926
+## Channel32    302.0341838
+## Channel33   -321.7226564
+## Channel34   -357.7911331
+## Channel35    462.4522471
+## Channel36    -47.4888697
+## Channel37   -335.2394608
+## Channel38    267.5643640
+## Channel39   -463.9890027
+## Channel40    925.9917924
+## Channel41   -997.4952577
+## Channel42    423.6208334
+## Channel43    432.0899296
+## Channel44   -548.5199342
+## Channel45   -120.3591597
+## Channel46    577.3962163
+## Channel47   -323.1874931
+## Channel48    -56.8769166
+## Channel49    -71.7587985
+## Channel50    372.1231270
+## Channel51   -693.1144580
+## Channel52   1319.0783916
+## Channel53  -1768.1923445
+## Channel54   1559.5391421
+## Channel55   -846.1912516
+## Channel56    193.2670768
+## Channel57    -17.8522107
+## Channel58     -1.6218930
+## Channel59    -95.7643127
+## Channel60    365.5090328
+## Channel61   -474.7783272
+## Channel62    434.9185212
+## Channel63   -160.3705721
+## Channel64    197.7161715
+## Channel65   -386.0347105
+## Channel66    345.0906603
+## Channel67   -333.0649717
+## Channel68    209.6084918
+## Channel69    -54.1848083
+## Channel70   -308.4584111
+## Channel71    286.4526990
+## Channel72   -142.4377933
+## Channel73    114.1458743
+## Channel74    436.3227964
+## Channel75    -19.1779733
+## Channel76   -626.5032564
+## Channel77    345.2654316
+## Channel78    -80.0370682
+## Channel79     -6.8450502
+## Channel80   -687.5364098
+## Channel81   1004.4289012
+## Channel82   -873.2521467
+## Channel83    417.6446929
+## Channel84    374.4662265
+## Channel85   -756.3190203
+## Channel86    674.7705731
+## Channel87    616.1113236
+## Channel88  -2134.5659721
+## Channel89   1680.1985410
+## Channel90    307.9914475
+## Channel91   -384.3839317
+## Channel92   -408.6478848
+## Channel93    189.3125294
+## Channel94    259.5101250
+## Channel95   -630.9519842
+## Channel96    574.4308144
+## Channel97   -141.5971464
+## Channel98   -357.7614483
+## Channel99    228.6726447
+## Channel100    29.2001936
+## Fat           -1.6496281
+## Moisture      -0.9203932
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cat}\NormalTok{(}\StringTok{"kappa:"}\NormalTok{, }\KeywordTok{kappa}\NormalTok{(A))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## kappa: 664318664630
+\end{verbatim}
+
+When repeating the steps with scaled data, R is able to solve the system
+of equations. The kappa is also much smaller than previously. We
+pressume that R can solve the equations now because the data is
+normalized and all variables are now on the same scale.\\
+Since we scaled the data, the values in matrix \(A\) are smaller than
+the unscaled ones. This resulted in \(A\) being an approximately
+well-conditioned matrix, shown by the new \(kappa(A)\) value which is
+much smaller than before.
+
+\newpage
+
+\hypertarget{appendix}{%
+\section{Appendix}\label{appendix}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{RNGversion}\NormalTok{(}\KeywordTok{min}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(}\KeywordTok{getRversion}\NormalTok{()), }\StringTok{"3.6.2"}\NormalTok{))}
+\NormalTok{knitr}\OperatorTok{::}\NormalTok{opts_chunk}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\DataTypeTok{echo =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(RMaCzek)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(tidyr)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(tinytex)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(readxl)}
+\NormalTok{x1 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{; x2 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{4}
+\ControlFlowTok{if}\NormalTok{(x1}\OperatorTok{-}\NormalTok{x2}\OperatorTok{==}\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is correct"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is wrong"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{x3 <-}\StringTok{ }\DecValTok{1}\NormalTok{; x4 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{2}
+\ControlFlowTok{if}\NormalTok{(x3}\OperatorTok{-}\NormalTok{x4}\OperatorTok{==}\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is correct"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is wrong"}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{sprintf}\NormalTok{(}\StringTok{"%.20f"}\NormalTok{, (x1}\OperatorTok{-}\NormalTok{x2))}
+\KeywordTok{sprintf}\NormalTok{(}\StringTok{"%.20f"}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{)}
+\NormalTok{x1 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{; x2 <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\DecValTok{4}
+\ControlFlowTok{if}\NormalTok{(}\KeywordTok{round}\NormalTok{((x1}\OperatorTok{-}\NormalTok{x2), }\DataTypeTok{digits =} \DecValTok{15}\NormalTok{) }\OperatorTok{==}\StringTok{ }\KeywordTok{round}\NormalTok{((}\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{), }\DataTypeTok{digits =} \DecValTok{15}\NormalTok{))\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is correct"}\NormalTok{)}
+\NormalTok{\}}\ControlFlowTok{else}\NormalTok{\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"Subtraction is wrong"}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{f <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{return}\NormalTok{(x)}
+\NormalTok{\}}
+
+\NormalTok{myderiv <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(f, x, e)\{}
+\NormalTok{  deriv <-}\StringTok{ }\NormalTok{(}\KeywordTok{f}\NormalTok{(x }\OperatorTok{+}\StringTok{ }\NormalTok{e) }\OperatorTok{-}\StringTok{ }\KeywordTok{f}\NormalTok{(x))}\OperatorTok{/}\NormalTok{(e)}
+  \KeywordTok{return}\NormalTok{(deriv)}
+\NormalTok{\}}
+\KeywordTok{myderiv}\NormalTok{(}\DataTypeTok{f =}\NormalTok{ f, }\DataTypeTok{x =} \DecValTok{1}\NormalTok{, }\DataTypeTok{e =} \DecValTok{10}\OperatorTok{^-}\DecValTok{15}\NormalTok{)}
+\KeywordTok{myderiv}\NormalTok{(}\DataTypeTok{f =}\NormalTok{ f, }\DataTypeTok{x =} \DecValTok{100000}\NormalTok{, }\DataTypeTok{e =} \DecValTok{10}\OperatorTok{^-}\DecValTok{15}\NormalTok{)}
+\NormalTok{myvar <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(x)}
+\NormalTok{  variance <-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{(n}\DecValTok{-1}\NormalTok{)) }\OperatorTok{*}\StringTok{ }\NormalTok{(}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\OperatorTok{-}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{/}\NormalTok{n)}\OperatorTok{*}\NormalTok{(}\KeywordTok{sum}\NormalTok{(x))}\OperatorTok{^}\DecValTok{2}\NormalTok{))}
+  \KeywordTok{return}\NormalTok{(variance)}
+\NormalTok{\}}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{, }\DataTypeTok{kind =} \StringTok{"Mersenne-Twister"}\NormalTok{, }\DataTypeTok{normal.kind =} \StringTok{"Inversion"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10000}\NormalTok{, }\DataTypeTok{mean=}\DecValTok{10}\OperatorTok{^}\DecValTok{8}\NormalTok{, }\DataTypeTok{sd=}\DecValTok{1}\NormalTok{)}
+\NormalTok{Yi <-}\StringTok{ }\DecValTok{0}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(data))\{}
+\NormalTok{  Yi[i] <-}\StringTok{ }\KeywordTok{myvar}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i]) }\OperatorTok{-}\StringTok{ }\KeywordTok{var}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i])}
+\NormalTok{\}}
+
+\NormalTok{i <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10000}\NormalTok{)}
+  
+\KeywordTok{plot}\NormalTok{(i, Yi)}
+\NormalTok{newvar <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+\NormalTok{  n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(x)}
+\NormalTok{  xbar <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\KeywordTok{mean}\NormalTok{(x), n)}
+\NormalTok{  variance <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(((x }\OperatorTok{-}\StringTok{ }\NormalTok{xbar)}\OperatorTok{^}\DecValTok{2}\NormalTok{))}\OperatorTok{/}\NormalTok{(n}\DecValTok{-1}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(variance)}
+\NormalTok{\}}
+
+\NormalTok{Yi2 <-}\StringTok{ }\DecValTok{0}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(data))\{}
+\NormalTok{  Yi2[i] <-}\StringTok{ }\KeywordTok{newvar}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i]) }\OperatorTok{-}\StringTok{ }\KeywordTok{var}\NormalTok{(data[}\DecValTok{1}\OperatorTok{:}\NormalTok{i])}
+\NormalTok{\}}
+
+\NormalTok{i <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10000}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(i, Yi2)}
+
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"tecator.xls"}\NormalTok{)}
+\NormalTok{y_index <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"Protein"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(data))}
+\NormalTok{y <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data}\OperatorTok{$}\NormalTok{Protein)}
+\NormalTok{X <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data[,}\OperatorTok{-}\NormalTok{y_index])}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{X}
+\NormalTok{b <-}\StringTok{  }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{y  }
+\KeywordTok{solve}\NormalTok{(A, b)}
+\KeywordTok{kappa}\NormalTok{(A)}
+\NormalTok{data2 <-}\StringTok{ }\KeywordTok{scale}\NormalTok{(data)}
+\NormalTok{y_index <-}\StringTok{ }\KeywordTok{grep}\NormalTok{(}\StringTok{"Protein"}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(data2))}
+\NormalTok{y <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data2[,y_index])}
+\NormalTok{X <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(data2[,}\OperatorTok{-}\NormalTok{y_index])}
+\NormalTok{A <-}\StringTok{ }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{X}
+\NormalTok{b <-}\StringTok{  }\KeywordTok{t}\NormalTok{(X) }\OperatorTok{%*%}\StringTok{ }\NormalTok{y  }
+\KeywordTok{solve}\NormalTok{(A, b)}
+\KeywordTok{cat}\NormalTok{(}\StringTok{"kappa:"}\NormalTok{, }\KeywordTok{kappa}\NormalTok{(A))}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}
