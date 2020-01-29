@@ -84,10 +84,22 @@ A <- t(X)%*%X
 b <- t(X) %*% y
 
 beta = solve(A,b)
+
 #### Explanation : The matrix A is not invertible and thus cannot be used to plot or come up with a regression model 
-
+###### Ismail
+# this implies that the problem is not specific 
+# (does not possess a unique, well-defined solution 
+# for each choice of data; that is, the matrix is not invertible), 
+# and no algorithm can be expected to reliably find a solution
 kappa(A)
-
+###### Bayu
+# If the condition number is not too much larger than one, 
+# the matrix is well-conditioned, which means that its inverse can be computed
+# with good accuracy. If the condition number is very large, 
+# then the matrix is said to be ill-conditioned. Practically, 
+# such a matrix is almost singular, and the computation of its inverse, 
+# or solution of a linear system of equations is prone to large numerical errors.
+# A matrix that is not invertible has condition number equal to infinity.
 ####Scale the data set and repeat step 2-4
 X<- scale(X, scale= TRUE)
 A <- t(X)%*%X
@@ -97,5 +109,6 @@ beta
 
 kappa(A) ### much more smaller 
 
-# Note: we use kappa to evaluate classifiers since it takes into account random chances  
+#Note: we use kappa to evaluate classifiers since it takes into account random chances  
+
 
