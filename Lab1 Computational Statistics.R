@@ -77,10 +77,25 @@ set.seed(12345)
 data <- read.csv("C:\\Users\\hp\\Desktop\\Computational stat methods\\tecator.csv")
 
 y <- data$Protein 
-data$Protein <- NULL
 
+data$Protein <- NULL
 X<- as.matrix(data)
 A <- t(X)%*%X
-b <- t(X) * y
+b <- t(X) %*% y
 
 beta = solve(A,b)
+#### Explanation : The matrix A is not invertible and thus cannot be used to plot or come up with a regression model 
+
+kappa(A)
+
+####Scale the data set and repeat step 2-4
+X<- scale(X, scale= TRUE)
+A <- t(X)%*%X
+b <- t(X) %*% y
+beta = solve(A,b)
+beta
+
+kappa(A) ### much more smaller 
+
+# Note: we use kappa to evaluate classifiers since it takes into account random chances  
+
